@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+
+  web:
+    image: nginx
+    deploy:
+      mode: replicated
+      replicas: 5
+    ports:
+      - "80"
+    volumes:
+      - ./web-content:/usr/share/nginx/html
+  spring-app:
+    image: maxleschuk/my-spring-app:latest
+    depends_on:
+      - database
+    ports:
+      - "8080:8080"
+
+  database:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: devdb
+      MYSQL_USER: devuser
+      MYSQL_PASSWORD: devpass
+    ports:
+      - "3306:3306"
